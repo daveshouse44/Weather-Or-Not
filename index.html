@@ -4,22 +4,38 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!--Add additional APIs for style here-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="Assets/style.css"/>
     <title>Weather Or Not</title>
 </head>
 <body>
-    <header>
-
-        <h1 class="app-title">Weather Or Not</h1>
+    <header class="hero">
+        
+        <h1 class="app-title" id="title">Weather Or Not</h1>
+        <p class="header-text" id="instructions">Search for a city to see whether or not the weather is nice for travel!</p>
 
     </header>
 
+    <main>
+
+        <div class="card">
+            <h3 for="city" class="card-header">Search for a City:</h3>
+                <form id="user-search" class ="card-body">
+                    <input type="text" id="city-search" placeholder="City Name Here!"/>
+                    <button type="submit" class="btn">Search</button>
+                </form>
+        </div>
+
+        <div class="card"> 
+            <ul class="history" id="cityHistory">
+            </ul>
+        </div> 
+
+    </main>
 
 
 
-
-
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="Assets/script.js"></script>
 </body>
 </html>
