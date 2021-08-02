@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
     <link rel="stylesheet" href="Assets/style.css"/>
     <title>Weather Or Not</title>
 </head>
@@ -29,12 +30,28 @@
         <div class="card"> 
             <ul class="history" id="cityHistory">
             </ul>
-        </div> 
+        </div>
+        <div id="weather-container" class=" card card-body min-70-vh  ">
+            <div id="weather" >
+             
+              <h1 id="location"></h1>
+              <div id="temp"></div>
+              <div id="humidity"></div>
+              <div id="windSpeed"></div>
+              <div id="UVindex"></div>
+            </div>
+            <div></div>
+            <div id="forecast"  class="min-40-vh align-end flex-row justify-space-between">
+             
+            </div>
+          </div>
+
+
 
     </main>
 
 
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="Assets/script.js"></script>
 </body>
