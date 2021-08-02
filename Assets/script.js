@@ -1,5 +1,5 @@
     
-//     
+// Gets API values for city searched
 var getApi = function(city) {
         
     var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=d7a11f2d002ad68c2717375f3d4e253a";
