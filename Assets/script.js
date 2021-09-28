@@ -1,88 +1,126 @@
-var citiesSearch = JSON.parse(localStorage.getItem("citiesSearch")) || [];
-// Gets API values for city searched
-var getApi = function (city) {
-  var apiUrl =
-    "https://api.openweathermap.org/data/2.5/weather?q=" +
-    city +
-    "&appid=d7a11f2d002ad68c2717375f3d4e253a";
+const cityDisp = $("#cityDisp");
+const tempDisp = $("#tempDisp");
+const windDisp = $("#windSpeedDisp");
+const uvDisp = $("#uvIDisp");
+const humidDisp = $("#humidDisp");
 
-  fetch(apiUrl).then(function (response) {
-    if (response.ok) {
-      //console.log(response);
-      response.json().then(function (data) {
-        console.log(data);
+var citiesSearched = JSON.parse(localStorage.getItem("citiesSearch")) || [];
 
-        getWeatherData(data.coord.lat, data.coord.lon);
-      });
-    } else {
-      alert("Enter a city to search!");
-    }
-  });
-};
+// Gets all API values for city searched
+function getWeatherData(userInput) {
+  const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${userInput}&units=imperial&appid=d7a11f2d002ad68c2717375f3d4e253a`;
 
-// Captures city names and saves to history card
-$(".btn").click(function () {
+  fetch(apiUrl)
+    .then((response) => response.json())
+    .then((data) => {
+      //console.log(data)
+      const temp = data.main.temp;
+      const humid = data.main.humidity;
+      const icon = data.weather[0].icon;
+      const wind = data.wind.speed;
+      const lat = data.coord.lat;
+      const lon = data.coord.lon;
+      const name = data.name;
+
+      let apiUvUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=alerts,hourly,minutely&units=imperial&appid=d7a11f2d002ad68c2717375f3d4e253a`;
+      fetch(apiUvUrl)
+        //console.log(response);
+        .then((response) => response.json())
+        .then((data) => {
+          const uv = data.current.uvi;
+          dispCityWeather(name, temp, humid, icon, wind, uv);
+
+          // const forcast = data.daily;
+          // forcast.forEach((element) => {
+          //   displayForcast(element);
+          // });
+        });
+    });
+}
+// Submits search value
+$("#citySelect").on("click", function (event) {
+  event.preventDefault(event);
+
   var cityVal = $("#city-search").val();
-  var listHistory = $("<li>").attr("city-data", cityVal).text(cityVal);
-  console.log(listHistory);
 
   if (cityVal === "") {
     alert("Please enter a city");
     return;
+  } else {
+    $("#city-search").val("");
+    getWeatherData(cityVal);
+    //setHistory(userInput);
+    $(".empty").empty();
   }
-
-  listHistory.appendTo(".history");
-  getApi(cityVal);
-
-  // Save in local storage
-  citiesSearch.push(cityVal);
-  localStorage.setItem("citiesSearch", JSON.stringify(citiesSearch));
-
-  // Clears search bar
-  document.getElementById("city-search").value = "";
 });
 
-// Calls API for lat and long to get forcast data
-function getWeatherData(latitude, longitude) {
-  var apiUrl =
-    "https://api.openweathermap.org/data/2.5/onecall?lat=" +
-    latitude +
-    "&lon=" +
-    longitude +
-    "&exclude=alerts,hourly,minutely&units=imperial&appid=d7a11f2d002ad68c2717375f3d4e253a";
-
-  fetch(apiUrl).then(function (response) {
-    if (response.ok) {
-      response.json().then(function (data) {
-        dispCityWeather(data);
-        //forecastWeather(data);
-      });
-    }
-  });
-}
-
 // Shows card for searched city
-function dispCityWeather(data) {
+function dispCityWeather(name, temp, humid, icon, wind, uv) {
+  if (uv >= 6) {
+    var severity = "bg-danger";
+  } else if (uv <= 2) {
+    var severity = "bg-success";
+  } else {
+    var severity = "bg-warning";
+  }
   //$("#cityHistory").empty();
+  console.log(name, temp, humid, icon, wind, uv);
+  const title = $("<h2>");
+  const dispTemp = $("<p>");
+  const dispHumid = $("<p>");
+  const dispIcon = $("<img>");
+  const dispWind = $("<p>");
+  const dispUV = $("<p>");
+  const span = $("<span>");
 
-  var date = moment(new Date(data.dt * 1000)).format("MM/DD/YYYY");
-  var temperature = Math.round(parseFloat(data.main.temp));
-  var humidity = data.main.humidity;
-  var windspeed = data.wind.speed;
-  var icon =
-    "<img src=https://openweathermap.org/img/wn/" +
-    data.weather[0].icon +
-    "@2x.png>";
+  title.text(name);
+  title.addClass("center");
+  dispIcon.attr("src", `http://openweathermap.org/img/wn/${icon}@2x.png`);
+  cityDisp.addClass("bg-info");
 
-  document.getElementById("cityDisp").innerHTML =
-    data.name + "" + date + "" + icon;
-  document.getElementById("tempDisp").innerHTML =
-    "Temperature: " + temperature + "F&deg;";
-  document.getElementById("humidDisp").innerHTML =
-    "Humidity: " + humidity + "%";
-  document.getElementById("windSpeedDisp").innerHTML =
-    "Wind Speed: " + windspeed + "MPH";
+  dispTemp.text(`Temperature: ${temp}`);
+  dispTemp.addClass("fw-bold");
+
+  dispHumid.text(`Humidity: ${humid}`);
+  dispHumid.addClass("fw-bold");
+
+  dispWind.text(`Windspeed: ${wind}`);
+  dispWind.addClass("fw-bold");
+
+  dispUV.text(`UV: `);
+  dispUV.addClass("fw-bold");
+
+  span.addClass(severity);
+  span.addClass("fw-bolder");
+  span.text(`${uv}`);
+
+  cityDisp.append(title);
+  cityDisp.append(dispIcon);
+  tempDisp.append(dispTemp);
+  humidDisp.append(dispHumid);
+  windDisp.append(dispWind);
+  uvDisp.append(dispUV);
+  uvDisp.append(span);
 }
+
+//   var date = moment(new Date(data.dt * 1000)).format("MM/DD/YYYY");
+//   var temperature = Math.round(parseFloat(data.main.temp));
+//   var humidity = data.main.humidity;
+//   var windspeed = data.wind.speed;
+//   var icon =
+//     "<img src=https://openweathermap.org/img/wn/" +
+//     data.weather[0].icon +
+//     "@2x.png>";
+
+//   document.getElementById("cityDisp").innerHTML =
+//     data.name + "" + date + "" + icon;
+//   document.getElementById("tempDisp").innerHTML =
+//     "Temperature: " + temperature + "F&deg;";
+//   document.getElementById("humidDisp").innerHTML =
+//     "Humidity: " + humidity + "%";
+//   document.getElementById("windSpeedDisp").innerHTML =
+//     "Wind Speed: " + windspeed + "MPH";
+// }
 
 // To run API for the saved cities on list
 $(".list").on("click", function (event) {
