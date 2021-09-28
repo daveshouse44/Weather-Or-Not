@@ -75,7 +75,7 @@ function dispCityWeather(name, temp, humid, icon, wind, uv) {
 
   title.text(name);
   title.addClass("center");
-  dispIcon.attr("src", `http://openweathermap.org/img/wn/${icon}@2x.png`);
+  dispIcon.attr("src", `https://openweathermap.org/img/wn/${icon}@2x.png`);
   cityDisp.addClass("bg-info");
 
   dispTemp.text(`Temperature: ${temp}`);

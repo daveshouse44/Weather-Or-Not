@@ -3,6 +3,7 @@
 [Click here to use App!](https://daveshouse44.github.io/Weather-Or-Not/)
 
 
+
 ### Quick Links
 
 -[Description](#description)
@@ -31,7 +32,9 @@ The following image shows the web application's appearance and functionality:
 ## Technologies-Used
 
 [Javascript](https://www.w3schools.com/js/default.asp)
+
 [HTML](https://www.w3schools.com/html/default.asp)
+
 [CSS](https://www.w3schools.com/css/default.asp)
 
 ## Contributions
@@ -42,6 +45,7 @@ David Tierney
 ## Credits
 
 Trilogy Education Services
+
 [W3Schools](https://www.w3schools.com/)
 
 ## Questions
