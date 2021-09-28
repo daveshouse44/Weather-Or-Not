@@ -2,6 +2,9 @@
 
 [Click here to use App!](https://daveshouse44.github.io/Weather-Or-Not/)
 
+
+### Quick Links
+
 -[Description](#description)
 
 -[Screenshot](#screenshot)
@@ -23,7 +26,7 @@ The following app uses [OpenWeather API](https://openweathermap.org/api) to retr
 
 The following image shows the web application's appearance and functionality:
 
-![The weather app includes a search option, a list of cities, and a five-day forecast and current weather conditions for Atlanta.]()
+![The weather app includes a search option, a list of cities, a five-day forecast and current weather conditions.]()
 
 ## Technologies-Used
 
