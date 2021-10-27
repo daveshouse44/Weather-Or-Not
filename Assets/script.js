@@ -64,7 +64,7 @@ function dispCityWeather(name, temp, humid, icon, wind, uv) {
     var severity = "bg-warning";
   }
   //$("#cityHistory").empty();
-  console.log(name, temp, humid, icon, wind, uv);
+  // console.log(name, temp, humid, icon, wind, uv);
   const title = $("<h2>");
   const dispTemp = $("<p>");
   const dispHumid = $("<p>");
@@ -73,7 +73,10 @@ function dispCityWeather(name, temp, humid, icon, wind, uv) {
   const dispUV = $("<p>");
   const span = $("<span>");
 
-  title.text(name);
+  let date = new Date().toLocaleDateString();
+  
+
+  title.text(name +" "+ date);
   title.addClass("center");
   dispIcon.attr("src", `https://openweathermap.org/img/wn/${icon}@2x.png`);
   cityDisp.addClass("bg-info");
@@ -101,6 +104,10 @@ function dispCityWeather(name, temp, humid, icon, wind, uv) {
   windDisp.append(dispWind);
   uvDisp.append(dispUV);
   uvDisp.append(span);
+}
+
+function displayForcast(data){
+
 }
 
 //   var date = moment(new Date(data.dt * 1000)).format("MM/DD/YYYY");
