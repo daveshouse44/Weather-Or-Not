@@ -3,6 +3,7 @@ const tempDisp = $("#tempDisp");
 const windDisp = $("#windSpeedDisp");
 const uvDisp = $("#uvIDisp");
 const humidDisp = $("#humidDisp");
+const forecastContainer = $("#forecast");
 
 var citiesSearched = JSON.parse(localStorage.getItem("citiesSearch")) || [];
 
@@ -30,10 +31,11 @@ function getWeatherData(userInput) {
           const uv = data.current.uvi;
           dispCityWeather(name, temp, humid, icon, wind, uv);
 
-          // const forcast = data.daily;
-          // forcast.forEach((element) => {
-          //   displayForcast(element);
-          // });
+          const forecast = data.daily;
+          console.log(forecast);
+          forecast.forEach((element) => {
+            displayForecast(element);
+          });
         });
     });
 }
@@ -49,7 +51,7 @@ $("#citySelect").on("click", function (event) {
   } else {
     $("#city-search").val("");
     getWeatherData(cityVal);
-    //setHistory(userInput);
+    setHistory(cityVal);
     $(".empty").empty();
   }
 });
@@ -63,8 +65,7 @@ function dispCityWeather(name, temp, humid, icon, wind, uv) {
   } else {
     var severity = "bg-warning";
   }
-  //$("#cityHistory").empty();
-  // console.log(name, temp, humid, icon, wind, uv);
+
   const title = $("<h2>");
   const dispTemp = $("<p>");
   const dispHumid = $("<p>");
@@ -74,9 +75,8 @@ function dispCityWeather(name, temp, humid, icon, wind, uv) {
   const span = $("<span>");
 
   let date = new Date().toLocaleDateString();
-  
 
-  title.text(name +" "+ date);
+  title.text(name + " " + date);
   title.addClass("center");
   dispIcon.attr("src", `https://openweathermap.org/img/wn/${icon}@2x.png`);
   cityDisp.addClass("bg-info");
@@ -106,9 +106,74 @@ function dispCityWeather(name, temp, humid, icon, wind, uv) {
   uvDisp.append(span);
 }
 
-function displayForcast(data){
+function displayForecast(data) {
+  const cardDisp = $("<div>");
+  const forecastDisp = $("<div>");
+  const dispDate = $("<h4>");
+  const dispIcon = $("<img>");
+  const dispTemp = $("<p>");
+  const dispHumid = $("<p>");
+  const dispWind = $("<p>");
+  var date = new Date(data.dt * 1000).toLocaleDateString();
 
+  cardDisp.addClass("card");
+  forecastDisp.addClass("card-body bg-primary");
+
+  dispDate.addClass("card-title text-white");
+  dispDate.text(date);
+
+  dispIcon.attr(
+    "src",
+    `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`
+  );
+
+  dispTemp.addClass("card-text text-white");
+  dispTemp.text(`Temp: ${data.temp.max}`);
+
+  dispHumid.addClass("card-text text-white");
+  dispHumid.text(`Humidity: ${data.humidity}`);
+
+  dispWind.addClass("card-text text-white");
+  dispWind.text(`Wind: ${data.wind_speed}`);
+
+  forecastContainer.append(cardDisp);
+  cardDisp.append(forecastDisp);
+  forecastDisp.append(date);
+  forecastDisp.append(dispDate);
+  forecastDisp.append(dispIcon);
+  forecastDisp.append(dispTemp);
+  forecastDisp.append(dispHumid);
+  forecastDisp.append(dispWind);
 }
+
+function setHistory() {
+  var cities = [];
+  var newCity = [];
+
+  var getCity = response;
+
+  cities = JSON.parse(localStorage.getItem("citiesSearch")) || [];
+  cities.push(getCity);
+
+  $each(cities, function (index, element) {
+    if ($.inArray(element, newCity) === -1) newCity.push(element);
+  });
+  localStorage.setItem("citiesSearch", JSON.stringify(newCity));
+  getHistory();
+}
+
+function getHistory (){
+  var getData = localStorage.getItem("citiesSearch")
+  var historySearch = JSON.parse(getData)
+  $("#cityHistory").empty();
+
+  for (let i = 0; i < historySearch.length; i++) {
+    var city = historySearch[i];
+    if (city);
+    generateHistory(city);
+  }
+}
+
 
 //   var date = moment(new Date(data.dt * 1000)).format("MM/DD/YYYY");
 //   var temperature = Math.round(parseFloat(data.main.temp));
