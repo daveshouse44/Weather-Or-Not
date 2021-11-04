@@ -4,8 +4,7 @@ const windDisp = $("#windSpeedDisp");
 const uvDisp = $("#uvIDisp");
 const humidDisp = $("#humidDisp");
 const forecastContainer = $("#forecast");
-
-var citiesSearched = JSON.parse(localStorage.getItem("citiesSearch")) || [];
+const historyContainer = $('#history');
 
 // Gets all API values for city searched
 function getWeatherData(userInput) {
@@ -45,7 +44,7 @@ $("#citySelect").on("click", function (event) {
 
   var cityVal = $("#city-search").val();
 
-  if (cityVal === "") {
+  if (cityVal == "") {
     alert("Please enter a city");
     return;
   } else {
@@ -106,6 +105,7 @@ function dispCityWeather(name, temp, humid, icon, wind, uv) {
   uvDisp.append(span);
 }
 
+// Generates forecast cards
 function displayForecast(data) {
   const cardDisp = $("<div>");
   const forecastDisp = $("<div>");
@@ -146,58 +146,58 @@ function displayForecast(data) {
   forecastDisp.append(dispWind);
 }
 
-function setHistory() {
+// Setting searched city to history list and saving to local storage
+function setHistory(data) {
   var cities = [];
   var newCity = [];
 
-  var getCity = response;
+  var getCity = data;
 
-  cities = JSON.parse(localStorage.getItem("citiesSearch")) || [];
+  cities = JSON.parse(localStorage.getItem("cityHistory")) || [];
   cities.push(getCity);
 
-  $each(cities, function (index, element) {
+  $.each(cities, function (index, element) {
     if ($.inArray(element, newCity) === -1) newCity.push(element);
   });
-  localStorage.setItem("citiesSearch", JSON.stringify(newCity));
+  localStorage.setItem("cityHistory", JSON.stringify(newCity));
   getHistory();
 }
 
-function getHistory (){
-  var getData = localStorage.getItem("citiesSearch")
-  var historySearch = JSON.parse(getData)
-  $("#cityHistory").empty();
+// Getting history
+function getHistory() {
+  var getData = localStorage.getItem("cityHistory");
+  var historySearch = JSON.parse(getData);
+  $("#history").empty();
 
   for (let i = 0; i < historySearch.length; i++) {
     var city = historySearch[i];
     if (city);
-    generateHistory(city);
+    createHistory(city);
   }
 }
 
+function createHistory(response) {
+  const btn = $("<button>");
+  const btnClass = "btn btn-outline-dark card-body";
 
-//   var date = moment(new Date(data.dt * 1000)).format("MM/DD/YYYY");
-//   var temperature = Math.round(parseFloat(data.main.temp));
-//   var humidity = data.main.humidity;
-//   var windspeed = data.wind.speed;
-//   var icon =
-//     "<img src=https://openweathermap.org/img/wn/" +
-//     data.weather[0].icon +
-//     "@2x.png>";
+  btn.attr("type", "button");
+  btn.addClass(btnClass);
+  btn.text(response);
+  historyContainer.append(btn);
+}
 
-//   document.getElementById("cityDisp").innerHTML =
-//     data.name + "" + date + "" + icon;
-//   document.getElementById("tempDisp").innerHTML =
-//     "Temperature: " + temperature + "F&deg;";
-//   document.getElementById("humidDisp").innerHTML =
-//     "Humidity: " + humidity + "%";
-//   document.getElementById("windSpeedDisp").innerHTML =
-//     "Wind Speed: " + windspeed + "MPH";
-// }
+// Function to clear history and local storage
+$("#clear").on("click", (event) => {
+  $("#history").empty();
+  localStorage.clear();
+});
+
+getHistory();
 
 // To run API for the saved cities on list
-$(".list").on("click", function (event) {
-  console.log(event.target.getAttribute("city-data"));
-  var histSearch = event.target;
-  var search = histSearch.getAttribute("city-data");
-  getApi(search);
-});
+$(document).on('click','.card-body',function() {
+  const history = $(this).text();
+  console.log(history)
+  getWeatherData(history);
+  $(".empty").empty();
+})
