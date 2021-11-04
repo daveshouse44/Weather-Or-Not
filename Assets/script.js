@@ -138,7 +138,7 @@ function displayForecast(data) {
 
   forecastContainer.append(cardDisp);
   cardDisp.append(forecastDisp);
-  forecastDisp.append(date);
+  // forecastDisp.append(date);
   forecastDisp.append(dispDate);
   forecastDisp.append(dispIcon);
   forecastDisp.append(dispTemp);
@@ -189,6 +189,7 @@ function createHistory(response) {
 // Function to clear history and local storage
 $("#clear").on("click", (event) => {
   $("#history").empty();
+  $(".empty").empty();
   localStorage.clear();
 });
 
